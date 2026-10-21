@@ -1,3 +1,5 @@
+import { plantChannel, plantParticipants } from './plantWrangler'
+
 const base = import.meta.env.BASE_URL
 
 // Placeholder persona for the prototype. See PERSONA.md for the full
@@ -12,6 +14,8 @@ export const currentUser = {
 }
 
 export const contacts = [
+  plantChannel,
+  ...plantParticipants,
   { id: 1, name: 'Sarah Chen', initials: 'SC', color: '#6264A7', status: 'available', avatar: `${base}avatars/sarah-chen.jpg` },
   { id: 2, name: 'Claude', initials: null, color: '#D97757', status: null, isAgent: true, logo: 'claude', avatar: `${base}avatars/claude.png`, description: 'AI assistant by Anthropic' },
   { id: 3, name: 'Emma Larsen', initials: 'EL', color: '#E74856', status: 'away', avatar: `${base}avatars/emma-larsen.jpg` },
@@ -60,6 +64,13 @@ export const contacts = [
 //  • Morgan Collective is Alex's own boutique consultancy.
 export const teams = [
   {
+    id: 't-plant-operations',
+    name: 'Plant Operations',
+    initials: 'PO',
+    color: '#5B5FC7',
+    channels: [{ id: plantChannel.id }],
+  },
+  {
     id: 't-northwind',
     name: 'Northwind Traders',
     initials: 'NT',
@@ -85,6 +96,7 @@ export const teams = [
 ]
 
 export const favorites = [
+  { contactId: plantChannel.id },
   { contactId: 1 },
   { contactId: 12 },
   { contactId: 15 },

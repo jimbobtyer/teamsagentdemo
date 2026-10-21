@@ -12,7 +12,10 @@ import './ChannelThreadRail.css'
 // entirely. `initialPostId` opens the rail in detail mode for that post; if
 // it changes from the outside (e.g. an Activity event re-targets the rail),
 // the rail re-syncs to the new thread.
-export default function ChannelThreadRail({ posts, initialPostId, activeContact, onClose }) {
+export default function ChannelThreadRail({
+  posts, initialPostId, activeContact, onClose, onCardAction,
+  renderMessageDetails, composeContent, headerContent, scrollTargetId, onSelectPost,
+}) {
   const [initialPostIdCursor, setInitialPostIdCursor] = useState(initialPostId)
   const [viewPostId, setViewPostId] = useState(initialPostId)
   if (initialPostIdCursor !== initialPostId) {
@@ -27,10 +30,18 @@ export default function ChannelThreadRail({ posts, initialPostId, activeContact,
   const post = viewPostId ? posts.find((p) => p.id === viewPostId) : null
   const extraReplies = post ? extraRepliesByPost[post.id] || [] : []
   const allReplies = post ? [...(post.replies || []), ...extraReplies] : []
+  const hasCustomCompose = !!composeContent
+  const selectedPostId = post?.id
+  const seededReplyCount = post?.replies?.length
 
   useEffect(() => {
-    if (post) endRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [extraReplies, post?.id])
+    if (!selectedPostId) return
+    const target = scrollTargetId
+      ? endRef.current?.parentElement.querySelector(`[data-message-id="${CSS.escape(scrollTargetId)}"]`)
+      : null
+    const element = target || endRef.current
+    element?.scrollIntoView({ behavior: hasCustomCompose ? 'instant' : 'smooth', block: target ? 'start' : 'end' })
+  }, [extraReplies.length, selectedPostId, seededReplyCount, scrollTargetId, hasCustomCompose])
 
   const flattenSubject = (p) => {
     if (p.subject) return p.subject
@@ -71,7 +82,7 @@ export default function ChannelThreadRail({ posts, initialPostId, activeContact,
             <IconButton
               label="Back to threads"
               className="channel-thread-rail-action channel-thread-rail-back"
-              onClick={() => setViewPostId(null)}
+              onClick={() => { setViewPostId(null); onSelectPost?.(null) }}
             >
               <ChevronLeft size={18} />
             </IconButton>
@@ -90,6 +101,7 @@ export default function ChannelThreadRail({ posts, initialPostId, activeContact,
         </div>
       </div>
 
+      {headerContent}
       {post ? (
         <>
           <div className="channel-thread-rail-body">
@@ -97,19 +109,23 @@ export default function ChannelThreadRail({ posts, initialPostId, activeContact,
               <MessageRow
                 message={{ ...post, threadReply: undefined }}
                 activeContact={activeContact}
+                onCardAction={onCardAction}
+                renderMessageDetails={renderMessageDetails}
               />
               {allReplies.map((reply) => (
                 <MessageRow
                   key={reply.id}
                   message={reply}
                   activeContact={activeContact}
+                  onCardAction={onCardAction}
+                  renderMessageDetails={renderMessageDetails}
                 />
               ))}
               <div ref={endRef} />
             </div>
           </div>
 
-          <div className="channel-thread-rail-compose">
+          {composeContent || <div className="channel-thread-rail-compose">
             <div className="channel-thread-rail-compose-box">
               <input
                 type="text"
@@ -123,7 +139,7 @@ export default function ChannelThreadRail({ posts, initialPostId, activeContact,
                 <Send />
               </IconButton>
             </div>
-          </div>
+          </div>}
         </>
       ) : posts.length === 0 ? (
         <div className="channel-thread-rail-body channel-thread-rail-body-empty">
@@ -145,7 +161,7 @@ export default function ChannelThreadRail({ posts, initialPostId, activeContact,
                   <button
                     type="button"
                     className="channel-thread-rail-list-item"
-                    onClick={() => setViewPostId(p.id)}
+                    onClick={() => { setViewPostId(p.id); onSelectPost?.(p.id) }}
                   >
                     <span className="channel-thread-rail-list-subject">{subject}</span>
                     <span className="channel-thread-rail-list-meta">

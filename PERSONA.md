@@ -1,5 +1,36 @@
 # Persona: Alex Morgan
 
+## Active prototype: Plant Wrangler
+
+The default experience is now a separate, fictional manufacturing scenario at
+**Caldova**. The Alex Morgan material below remains the persona for the original
+shell conversations; do not mix those collaborators into Plant Operations.
+
+- **Channel:** Plant Operations | Launch Readiness.
+- **Maya Chen:** operations manager; concise, asks for options before changing schedules.
+- **Elena Torres:** plant manager; owns the overtime decision and its estimated cost.
+- **David Okafor:** vice president of manufacturing; asks for the three-plant network view.
+- **Nora Singh:** maintenance lead; owns coverage checks and CP-17 operating constraints.
+- **Plant Wrangler:** fictional third-party collaborative manufacturing agent, not a person.
+  Distinguishes source facts from recommendations, names the human decision owner,
+  and does not claim to control equipment or enforce production policy.
+- **Story date:** Monday, October 19, 2026. Change control Tuesday, October 20;
+  changeover Friday, October 23; overtime Saturday, October 24; launch Monday,
+  October 26. Displayed times are PT. No live clock or generated timestamps.
+- **Capacity:** 9,300 available / 10,000 required units is a 7% network shortfall.
+  Vancouver Line 3 is 82% available vs. 91% required on a 4,000-unit rated baseline:
+  a separate 9-percentage-point gap. Overtime recovers 6 pp, earlier changeover
+  3 pp. This resolves 360 units locally, leaving 340 units elsewhere in the network.
+- All names, sources, capacity data, decisions and trace IDs are fictional.
+- **Main recording:** a three-minute shared-thread story: Maya asks
+  “@Plant Wrangler, can Line 3 take this rush order before launch?”; the agent
+  checks capacity and CP-17, shows a progressively revealed table, and embeds
+  two prepared schedule options. Maya selects the proposed adjustment and
+  prepares it for approval. Elena makes the explicit decision; Plant Wrangler
+  posts the agreed plan and its sources. Approval records a decision, never a
+  production schedule change. David's network question and the meeting are
+  optional follow-up, not required steps in this recording.
+
 Reference this file whenever generating new content for the prototype (messages, session titles, chat names, canned agent responses, seeded data). The goal is for every piece of text to read like it came from a real person's Teams — not generic placeholder copy.
 
 This persona is fictional. Don't tie messages to any real person, employer, or internal codename.

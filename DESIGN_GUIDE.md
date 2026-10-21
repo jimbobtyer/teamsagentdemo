@@ -1,5 +1,41 @@
 # Design Guide
 
+## Plant Wrangler recording surface
+
+- Preserve the Teams title bar, app rail, navigation pane, channel canvas and
+  shared thread rail. The Plant Operations channel is the default landing view.
+- Plant Wrangler uses a locally authored factory-and-agent-mark avatar, an
+  explicit Agent label and the existing AI-generated message badge. People use
+  fictional initials rather than stock photographs of real individuals.
+- The thread rail is widened to 510–700px for legible evidence and approval cards;
+  the remaining channel canvas keeps context, participants and the local decision
+  log visible. Record at 1440px or wider (1920x1080 recommended).
+- Reuse the existing Adaptive Card anatomy. Decision buttons use Teams purple
+  `#5B5FC7`; approved/scheduled cues use `#107C10`. Amber indicates a pending
+  decision, not a production incident. Facts, recommendations and citations are
+  visually separated. Source links are numbered and open local detail dialogs.
+- Use restrained 4–6px corners, neutral surfaces, 1px `#E8E8E8` dividers and the
+  inherited Segoe/system typography. No celebratory animations or moving cards.
+- Use the three-minute Ask (0:00–0:25), Check and answer (0:25–1:00),
+  Explore an option (1:00–1:45), Decide (1:45–2:30), Confirm (2:30–3:00)
+  recording sequence. Show these ranges in the discreet thread footer.
+- Automatic updates are limited to two 1.1-second work-status messages and
+  three 0.7-second table-row reveals. Status describes activity, not private
+  model reasoning. Reserve table-row space to avoid layout shifts. Next scene
+  advances these same states; all consequential actions still require clicks.
+- Render the answer as an Extended Markdown-style capacity / constraint / source
+  table, not an approval card. Embed a restrained, two-option HTML schedule
+  preview in the response. Radio selection explores the prepared data; a separate
+  Prepare for approval button hands the proposed adjustment to the decision card.
+  Keep the widget visually distinct from the Adaptive Card that records approval.
+- Human approval is explicitly attributed to Elena in a confirmation dialog,
+  then updated in place in the card. Access-aware responses, run evidence and
+  the optional product-neutral production architecture are labelled simulations
+  or conceptual; no connected-service or autonomous-control claims. The demo actor
+  selector illustrates a local app-side approval check, not real authentication.
+  Final confirmation explicitly says production was not changed. Keep the network
+  question, meeting card and execution evidence optional, outside the main story.
+
 ## Color Palette
 
 ### Layout Surfaces

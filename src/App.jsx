@@ -1,17 +1,19 @@
-import { useState, useCallback } from 'react'
-import { agentSessions as initialSessions, activityEvents as seedActivityEvents } from './data'
+import { useState, useReducer, useCallback } from 'react'
+import { agentSessions as initialSessions, activityEvents as seedActivityEvents, plantChannel, plantDemoReducer, initialPlantDemo } from './data'
 import NavRail from './components/NavRail'
 import ChatList from './components/ChatList'
 import ChatView from './components/ChatView'
 import ActivityList from './components/ActivityList'
 import TitleBar from './components/TitleBar'
+import PlantWranglerChannel from './components/PlantWranglerChannel'
 import { FreModal } from './components/common'
 import './App.css'
 
 export default function App() {
   const [activeView, setActiveView] = useState('chat') // 'chat' | 'activity'
-  const [activeChatId, setActiveChatId] = useState(1)
-  const [readChatIds, setReadChatIds] = useState(() => new Set([1]))
+  const [activeChatId, setActiveChatId] = useState(plantChannel.id)
+  const [readChatIds, setReadChatIds] = useState(() => new Set([plantChannel.id]))
+  const [plantDemo, dispatchPlantDemo] = useReducer(plantDemoReducer, initialPlantDemo)
   const [sessions, setSessions] = useState(initialSessions)
   const [dynamicSessionMessages, setDynamicSessionMessages] = useState({})
   // Activity feed: persist which events the user has opened so unread decorations clear.
@@ -21,10 +23,7 @@ export default function App() {
   // session (sessions rail), open a specific channel thread, or flash a
   // specific message so the user can see where a notification landed.
   const [navIntent, setNavIntent] = useState(null)
-  // FRE shows on every load while iterating on the prototype — dismiss only
-  // hides it for the current session. Swap to localStorage gating later if a
-  // real first-run-only behavior is needed.
-  const [showFre, setShowFre] = useState(true)
+  const [showFre, setShowFre] = useState(false)
 
   const dismissFre = useCallback(() => setShowFre(false), [])
 
@@ -101,7 +100,9 @@ export default function App() {
             readChatIds={readChatIds}
           />
         )}
-        <ChatView
+        {activeChatId === plantChannel.id ? (
+          <PlantWranglerChannel key={plantDemo.resetVersion} demo={plantDemo} dispatch={dispatchPlantDemo} />
+        ) : <ChatView
           activeChatId={activeChatId}
           onSelectChat={navigateToChat}
           sessions={sessions}
@@ -111,61 +112,21 @@ export default function App() {
           dynamicSessionMessages={dynamicSessionMessages}
           navIntent={navIntent}
           clearNavIntent={clearNavIntent}
-        />
+        />}
       </div>
       {showFre && (
         <FreModal
-          title="Feature name"
-          subtitle="One-sentence pitch for what this feature is and why it matters to the audience watching the demo."
+          title="Plant Wrangler"
+          subtitle="A collaborative manufacturing agent in a shared Teams channel."
           onDismiss={dismissFre}
         >
-          <h3 className="fre-section-title">Today</h3>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Describe
-            the current experience the demo audience is familiar with — the
-            workflow, the surfaces, the people involved. Sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua, ut enim ad minim
-            veniam, quis nostrud exercitation.
-          </p>
-
-          <h3 className="fre-section-title">Problem</h3>
-          <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse
-            cillum dolore. Name the friction sharply: what breaks down today,
-            who feels it, and how often. Excepteur sint occaecat cupidatat non
-            proident, sunt in culpa qui officia deserunt mollit anim id est
-            laborum, consectetur adipiscing elit sed do eiusmod.
-          </p>
-
-          <h3 className="fre-section-title">Solution</h3>
-          <p>
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-            nisi ut aliquip ex ea commodo consequat. Walk through the new
-            feature you're showing — the surface, the interaction, the moment
-            of delight. Duis aute irure dolor in reprehenderit in voluptate
-            velit esse cillum dolore eu fugiat nulla pariatur.
-          </p>
-          <p>
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum. If the feature is
-            best understood through a sequence, list the key beats here so the
-            audience knows what to look for as the demo plays.
-          </p>
-
-          <h3 className="fre-section-title">What this Unlocks</h3>
-          <p>
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-            accusantium doloremque laudantium. Spell out the downstream wins —
-            what gets faster, easier, or newly possible because of this
-            feature. Totam rem aperiam, eaque ipsa quae ab illo inventore
-            veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-          </p>
-          <p>
-            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit
-            aut fugit, sed quia consequuntur magni dolores eos qui ratione
-            voluptatem sequi nesciunt. Close with the audience-specific
-            takeaway — what the viewer should remember after the demo ends.
-          </p>
+          <h3 className="fre-section-title">The scenario</h3>
+          <p>Caldova has a seven-percent production-capacity shortfall across three plants before launch. Maya asks Plant Wrangler for a grounded Line 3 recovery recommendation in the shared channel.</p>
+          <h3 className="fre-section-title">People stay in control</h3>
+          <p>Review the capacity answer and its sources. Compare two prepared schedules in the embedded preview, prepare the proposed adjustment for approval, then record Elena’s explicit decision. Plant Wrangler confirms the agreed plan without changing production.</p>
+          <h3 className="fre-section-title">Recording controls</h3>
+          <p>Follow the three-minute Ask → Check and answer → Explore → Decide → Confirm timeline. Use the prepared question, schedule widget and approval card, or Next scene. Reset demo restores the opening state; all source snapshots and timestamps are fixed.</p>
+          <p className="fre-modal-footnote">Everything is fictional and local. Access scoping, identities, approvals, meeting invitations and execution evidence are simulated. No production services are connected.</p>
         </FreModal>
       )}
     </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { agentLogos } from '../shared/agentLogos'
-import { contacts, currentUser } from '../data/contacts'
+import { contacts, currentUser } from '../data'
 import { Avatar, LinkCard, PrivateDisclaimer, Check, ChainOfThought } from './common'
 import MessageActions from './MessageActions'
 
@@ -169,7 +169,7 @@ function ThreadReplyBadge({ reply, onClick }) {
   )
 }
 
-export default function MessageRow({ message, activeContact, onOpenThread }) {
+export default function MessageRow({ message, activeContact, onOpenThread, onCardAction, renderMessageDetails }) {
   const isMe = message.senderId === 'me'
   const isMultiParty = activeContact.isGroup || activeContact.isChannel
   const sender = isMe
@@ -275,9 +275,18 @@ export default function MessageRow({ message, activeContact, onOpenThread }) {
                   {/* Action row. */}
                   {card.actions && (
                     <div className="card-actions">
-                      {card.actions.map((action, j) => (
-                        <button key={j} className="card-action-btn">{action}</button>
-                      ))}
+                      {card.actions.map((action, j) => {
+                        const structured = typeof action === 'object'
+                        return (
+                          <button
+                            key={structured ? action.id : j}
+                            type="button"
+                            className={`card-action-btn${structured && action.primary ? ' card-action-primary' : ''}`}
+                            disabled={structured && action.disabled}
+                            onClick={() => onCardAction?.(structured ? action.id : action, card.id, message.id)}
+                          >{structured ? action.label : action}</button>
+                        )
+                      })}
                     </div>
                   )}
                 </div>
@@ -287,6 +296,7 @@ export default function MessageRow({ message, activeContact, onOpenThread }) {
           {message.chainOfThought && (
             <ChainOfThought steps={message.chainOfThought} />
           )}
+          {renderMessageDetails?.(message)}
         </div>
         {reactions.length > 0 && (
           <div className="message-reactions-bar">

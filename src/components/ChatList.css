@@ -230,6 +230,10 @@
   border-radius: 6px;
   cursor: pointer;
   position: relative;
+  width: calc(100% - 16px);
+  background: transparent;
+  font: inherit;
+  text-align: left;
 }
 
 .chat-list-item:hover,
@@ -266,6 +270,10 @@
   font-size: 14px;
   font-weight: 400;
   color: #242424;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chat-item-bold {
@@ -382,6 +390,10 @@
   cursor: pointer;
   font-size: 14px;
   color: #424242;
+  width: calc(100% - 16px);
+  background: transparent;
+  font-family: inherit;
+  text-align: left;
 }
 
 .channel-row:hover,

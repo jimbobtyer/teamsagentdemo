@@ -8,7 +8,10 @@
 //
 // Replies mirror MessageRow's shape (senderId of 'me' = current user).
 
+import { plantChannel, plantPosts } from './plantWrangler'
+
 export const channelPostsByContact = {
+  [plantChannel.id]: plantPosts,
   // Northwind Traders • General
   25: [
     {

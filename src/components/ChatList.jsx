@@ -65,15 +65,17 @@ export default function ChatList({ activeChatId, onSelectChat, readChatIds }) {
     const contact = contacts.find(c => c.id === chat.contactId)
     const unread = isUnread(chat.bold, contact.id)
     return (
-      <div
+      <button
+        type="button"
         key={contact.id}
         className={`chat-list-item ${contact.id === activeChatId ? 'selected' : ''}`}
+        aria-current={contact.id === activeChatId ? 'true' : undefined}
         onClick={() => onSelectChat(contact.id)}
       >
         <Avatar contact={contact} size={20} />
         <span className={`chat-item-name ${unread ? 'chat-item-bold' : ''}`}>{contact.name}</span>
         {unread && <span className="unread-dot" />}
-      </div>
+      </button>
     )
   }
 
@@ -196,16 +198,18 @@ export default function ChatList({ activeChatId, onSelectChat, readChatIds }) {
                 if (!channel) return null
                 const unread = isUnread(entry.bold, channel.id)
                 return (
-                  <div
+                  <button
+                    type="button"
                     key={channel.id}
                     className={`channel-row ${channel.id === activeChatId ? 'selected' : ''}`}
+                    aria-current={channel.id === activeChatId ? 'true' : undefined}
                     onClick={() => onSelectChat(channel.id)}
                   >
                     <span className={`channel-name ${unread ? 'chat-item-bold' : ''}`}>
                       {channel.name}
                     </span>
                     {unread && <span className="unread-dot" />}
-                  </div>
+                  </button>
                 )
               })}
             </div>

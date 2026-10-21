@@ -8,3 +8,8 @@ export { channelPostsByContact } from './data/channelPosts'
 export { copilotAgent, designerAgent, pollyAgent, breakthuAgent } from './data/agents'
 export { promptSuggestions } from './data/promptSuggestions'
 export { activityEvents } from './data/activityEvents'
+export {
+  plantChannel, plantParticipants, plantSources, plantPosts, plantQuestions,
+  plantAgenda, plantAnswerRows, plantScheduleOptions, plantSceneLabels,
+  initialPlantDemo, plantDemoReducer, getPlantReplies,
+} from './data/plantWrangler'
